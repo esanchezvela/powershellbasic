@@ -2,4 +2,6 @@ get-process | get-member
 
 get-process | where handles -ge 900 | select -property handles | sort handles
 
-Get-EventLog -LogName System -Newest 5 | Select -Property EventId, TimeWritten, Message
+Get-EventLog -LogName System -Newest 5 | Select -Property EventId, TimeWritten, Message | out-file c:\error.htm 
+
+
