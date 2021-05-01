@@ -1,0 +1,51 @@
+Connect-AzAccount 
+Select-AzureSubscription ""
+  
+### Source VHD (West US) - authenticated container ###
+$srcUri = "https://<StorageAccount>.blob.core.windows.net/vhdisks/disk2.vhd"
+  
+### Source Storage Account (West US) ###
+$srcStorageAccount = "<SourceStorageAccount>"
+$srcStorageKey = "<StorageAccountKey>"
+  
+### Target Storage Account (West US) ###
+$destStorageAccount = "<DestStorageAccount>"
+$destStorageKey = "<StorageAcountKey>"
+  
+### Create the source storage account context ### 
+$srcContext = New-AzStorageContext   -StorageAccountName $srcStorageAccount `
+                                     -StorageAccountKey $srcStorageKey 
+  
+### Create the destination storage account context ### 
+$destContext = New-AzStorageContext  -StorageAccountName $destStorageAccount `
+                                     -StorageAccountKey $destStorageKey 
+  
+### Destination Container Name ### 
+$containerName = "<DestContainer>"
+  
+### Destination Blob ###
+$destblob = "testcopy1.vhd"
+
+### Create the container on the destination ### 
+New-AzStorageContainer -Name $containerName -Context $destContext
+  
+### Start the asynchronous copy - specify the source authentication with -SrcContext ### 
+$blob1 = Start-AzStorageBlobCopy    -srcUri $srcUri `
+                                    -SrcContext $srcContext `
+                                    -DestContainer $containerName `
+                                    -DestBlob $destblob `
+                                    -DestContext $destContext
+ 
+### Retrieve the current status of the copy operation ###
+$status = $blob1 | Get-AzStorageBlobCopyState
+  
+### Print out status ### 
+$status
+  
+### Loop until complete ###                                    
+While($status.Status -eq "Pending"){
+  $status = $blob1 | Get-AzStorageBlobCopyState
+  ### Print out status ###
+  $status
+  Start-Sleep 10
+}
