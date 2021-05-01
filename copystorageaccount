@@ -1,6 +1,7 @@
-Connect-AzAccount 
-Select-AzureSubscription ""
-  
+
+# script to copy a VHD from one storage account to another, works across subscriptions.
+
+
 ### Source VHD (West US) - authenticated container ###
 $srcUri = "https://<StorageAccount>.blob.core.windows.net/vhdisks/disk2.vhd"
   
@@ -49,3 +50,6 @@ While($status.Status -eq "Pending"){
   $status
   Start-Sleep 10
 }
+
+#Azure #Powershell #StorageAccount 
+
