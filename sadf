@@ -1,0 +1,29 @@
+createNetworkUsageGraph(){
+for DATA_FILE in $*
+do
+mkdir -p output/$DATA_FILE
+
+ sadf -c ${DATA_FILE} > ${DATA_FILE}.new
+# sadf -g ${DATA_FILE}.new -O autoscale,skipempty,oneday,showinfo -- -n ALL > output/${DATA_FILE}/${CURRENT_SERVER}_${DATA_FILE}_NetworkUtilization_oneday.svg
+sadf -t -g ${DATA_FILE}.new -O autoscale,skipempty,showinfo -- -n ALL > output/${DATA_FILE}/${CURRENT_SERVER}_${DATA_FILE}_NetworkUtilization.svg
+sar -t -n ALL -f ${DATA_FILE}.new > output/${DATA_FILE}/${CURRENT_SERVER}_${DATA_FILE}_NetworkUtilization.txt
+done
+
+ ls -l output/${DATA_FILE}/*
+echo "cd output/${DATA_FILE}/"
+}
+
+createMemoryUsageGraph(){
+for DATA_FILE in $*
+do
+mkdir -p output/$DATA_FILE
+
+ sadf -c ${DATA_FILE} > ${DATA_FILE}.new
+# sadf -g ${DATA_FILE}.new -O autoscale,skipempty,oneday,showinfo -- -r ALL > output/${DATA_FILE}/${CURRENT_SERVER}_${DATA_FILE}_MemoryUtilization_oneday.svg
+sadf -t -g ${DATA_FILE}.new -O autoscale,skipempty,showinfo -- -r ALL > output/${DATA_FILE}/${CURRENT_SERVER}_${DATA_FILE}_MemoryUtilization.svg
+sar -t -r ALL -f ${DATA_FILE}.new > output/${DATA_FILE}/${CURRENT_SERVER}_${DATA_FILE}_MemoryUtilization.txt
+done
+
+ ls -l output/${DATA_FILE}/*
+echo "cd output/${DATA_FILE}/"
+}
