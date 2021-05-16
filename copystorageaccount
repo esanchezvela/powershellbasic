@@ -40,15 +40,12 @@ $blob1 = Start-AzStorageBlobCopy    -srcUri $srcUri `
 ### Retrieve the current status of the copy operation ###
 $status = $blob1 | Get-AzStorageBlobCopyState
   
-### Print out status ### 
-$status
-  
 ### Loop until complete ###                                    
 While($status.Status -eq "Pending"){
-  $status = $blob1 | Get-AzStorageBlobCopyState
   ### Print out status ###
   $status
   Start-Sleep 10
+  $status = $blob1 | Get-AzStorageBlobCopyState
 }
 
 #Azure #Powershell #StorageAccount 
